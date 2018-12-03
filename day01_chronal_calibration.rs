@@ -1,9 +1,9 @@
 use std::io::{self, Read};
 use std::collections::HashSet;
 
-fn main() -> io::Result<()> {
+fn main() {
     let mut input = String::new();
-    io::stdin().read_to_string(&mut input)?;
+    io::stdin().read_to_string(&mut input).unwrap();
 
     let ints_res : Result<Vec<i32>, _> = input.split_whitespace().map(|s| s.parse::<i32>()).collect();
     let mut ints = ints_res.unwrap().into_iter().cycle();
@@ -16,6 +16,4 @@ fn main() -> io::Result<()> {
     }
 
     println!("{}", sum);
-
-    Ok(())
 }
