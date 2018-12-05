@@ -1,8 +1,8 @@
+use std::collections::HashMap;
 use std::error;
 use std::fmt;
 use std::io::{self, Read};
 use std::str::FromStr;
-use std::collections::HashMap;
 
 #[derive(Debug)]
 struct Claim {
@@ -36,13 +36,19 @@ impl FromStr for Claim {
     type Err = FormatError;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         //#1 @ 257,829: 10x23
-        let no_whitespace : String = s.replace(" ", "");
-        let pieces : Vec<&str> = no_whitespace.trim_matches('#')
-            .split(|c| c == '@' || c == ',' || c == ':' || c == 'x').collect();
-        let ints_parsed = pieces.into_iter().map(|s| s.parse::<u32>()).collect::<Result<Vec<_>, _>>().map_err(|_| FormatError)?;
+        let no_whitespace: String = s.replace(" ", "");
+        let pieces: Vec<&str> = no_whitespace
+            .trim_matches('#')
+            .split(|c| c == '@' || c == ',' || c == ':' || c == 'x')
+            .collect();
+        let ints_parsed = pieces
+            .into_iter()
+            .map(|s| s.parse::<u32>())
+            .collect::<Result<Vec<_>, _>>()
+            .map_err(|_| FormatError)?;
         //let ints = ints_parsed.unwrap();
         if ints_parsed.len() != 5 {
-           Err(FormatError)
+            Err(FormatError)
         } else {
             Ok(Claim {
                 id: ints_parsed[0],
@@ -54,7 +60,6 @@ impl FromStr for Claim {
         }
     }
 }
-
 
 fn main() {
     let mut input = String::new();
@@ -68,7 +73,9 @@ fn main() {
     for c in claims.clone() {
         for i in 0..c.width {
             for j in 0..c.height {
-                let i = claimed.entry((c.left_margin + i, c.top_margin + j)).or_insert(0);
+                let i = claimed
+                    .entry((c.left_margin + i, c.top_margin + j))
+                    .or_insert(0);
                 *i += 1;
                 if *i == 2 {
                     duplicates += 1;

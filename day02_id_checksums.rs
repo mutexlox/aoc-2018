@@ -1,7 +1,7 @@
-use std::io::{self, Read};
 use std::collections::HashMap;
+use std::io::{self, Read};
 
-fn histogram(s : &str) -> HashMap<char, i32> {
+fn histogram(s: &str) -> HashMap<char, i32> {
     let mut out = HashMap::<char, i32>::new();
     for c in s.chars() {
         let i = out.entry(c).or_insert(0);
@@ -10,7 +10,7 @@ fn histogram(s : &str) -> HashMap<char, i32> {
     out
 }
 
-fn has_letter_n_times(hist : &HashMap<char, i32>, n : i32) -> bool {
+fn has_letter_n_times(hist: &HashMap<char, i32>, n: i32) -> bool {
     hist.values().any(|x| *x == n)
 }
 
@@ -19,7 +19,7 @@ fn differ_by_1(s1: &str, s2: &str) -> Option<String> {
         return None;
     }
     let mut found_diff = false;
-    let mut out : String = String::new();
+    let mut out: String = String::new();
     for (c1, c2) in s1.chars().zip(s2.chars()) {
         if c1 == c2 {
             out.push(c1);
@@ -38,7 +38,7 @@ fn main() {
     io::stdin().read_to_string(&mut input).unwrap();
 
     let ids = input.split_whitespace();
-    let ids_vec : Vec<_> = ids.clone().collect();
+    let ids_vec: Vec<_> = ids.clone().collect();
     let mut num_with_pairs = 0;
     let mut num_with_triples = 0;
     for id in ids {
@@ -59,6 +59,4 @@ fn main() {
             }
         }
     }
-
-
 }
