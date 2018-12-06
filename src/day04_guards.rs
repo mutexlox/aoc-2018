@@ -49,4 +49,23 @@ fn main() {
         sleepy_time,
         sleepy_id * (sleepy_time as i32)
     );
+
+    let mut most_asleep_id_at_minute = 0;
+    let mut most_asleep_minute: i32 = 0;
+    let mut most_times_asleep = 0;
+    for (id, minutes) in sleeps.iter() {
+        let (minute, times) = max_from_arr(minutes);
+        if *times > most_times_asleep {
+            most_asleep_id_at_minute = *id;
+            most_asleep_minute = minute as i32;
+            most_times_asleep = *times;
+        }
+    }
+    println!(
+        "Guard {} slept {} times at minute {}; id * minute = {}",
+        most_asleep_id_at_minute,
+        most_asleep_minute,
+        most_times_asleep,
+        most_asleep_id_at_minute * most_asleep_minute
+    );
 }
