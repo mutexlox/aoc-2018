@@ -1,0 +1,19 @@
+[package]
+name = "advent_of_code"
+version = "0.1.0"
+authors = ["Miriam Zimmerman <miriam@mutexlox.com>"]
+
+[dependencies]
+regex = "1"
+
+[[bin]]
+name = "day01"
+path = "src/day01_chronal_calibration.rs"
+
+[[bin]]
+name = "day02"
+path = "src/day02_id_checksums.rs"
+
+[[bin]]
+name = "day03"
+path = "src/day03_fabric.rs"
