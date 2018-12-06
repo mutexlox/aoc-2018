@@ -4,8 +4,12 @@ use regex::Regex;
 use std::collections::HashMap;
 use std::io::{self, Read};
 
+fn max_from_arr(arr: &[u8]) -> (usize, &u8) {
+    arr.iter().enumerate().max_by_key(|(_, t)| *t).unwrap()
+}
+
 fn main() {
-    let datetime_re = Regex::new(r"^\[\d{4}-\d{2}-(\d{2}) \d{2}:(\d{2})\].*$").unwrap();
+    let datetime_re = Regex::new(r"^\[\d{4}-\d{2}-\d{2} \d{2}:(\d{2})\].*$").unwrap();
     let guard_re = Regex::new(r"^.*Guard #(\d+) begins shift$").unwrap();
     let sleep_str = "falls asleep";
     let wake_str = "wakes up";
@@ -21,8 +25,8 @@ fn main() {
     for entry in entries {
         // Input was pre-processed (sorted chronologically)
         let caps = datetime_re.captures(entry).unwrap();
-        //let day: i32= caps.get(1).unwrap().as_str().parse().unwrap();
-        let minute: usize = caps.get(2).unwrap().as_str().parse().unwrap();
+
+        let minute: usize = caps.get(1).unwrap().as_str().parse().unwrap();
         if let Some(c) = guard_re.captures(&entry) {
             id = c.get(1).unwrap().as_str().parse::<i32>().unwrap();
         } else if entry.contains(sleep_str) {
@@ -38,16 +42,9 @@ fn main() {
         }
     }
     let sleepy_id = *sleep_times.iter().max_by_key(|(_, v)| *v).unwrap().0;
-    let sleepy_time = sleeps
-        .get(&sleepy_id)
-        .unwrap()
-        .iter()
-        .enumerate()
-        .max_by_key(|(_, t)| *t)
-        .unwrap()
-        .0;
+    let sleepy_time = max_from_arr(sleeps.get(&sleepy_id).unwrap()).0;
     println!(
-        "Guard {} slept most at {}; product = {}",
+        "Guard {} slept most of any guard and slept most at {}; product = {}",
         sleepy_id,
         sleepy_time,
         sleepy_id * (sleepy_time as i32)
