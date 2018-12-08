@@ -21,3 +21,7 @@ path = "src/day03_fabric.rs"
 [[bin]]
 name = "day04"
 path = "src/day04_guards.rs"
+
+[[bin]]
+name = "day05"
+path = "src/day05_polymer.rs"
