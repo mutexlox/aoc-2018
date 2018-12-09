@@ -46,7 +46,7 @@ impl FromStr for Claim {
             .map(|s| s.parse::<u32>())
             .collect::<Result<Vec<_>, _>>()
             .map_err(|_| FormatError)?;
-        //let ints = ints_parsed.unwrap();
+
         if ints_parsed.len() != 5 {
             Err(FormatError)
         } else {
