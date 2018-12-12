@@ -87,7 +87,7 @@ fn num_within_max_dist(
         for y in top.y..bot.y + 1 {
             let mut tot = 0;
             for point in points {
-                tot += point.dist(&Point{x: x, y: y});
+                tot += point.dist(&Point { x: x, y: y });
             }
             if tot < max_dist {
                 count += 1;
