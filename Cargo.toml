@@ -29,3 +29,7 @@ path = "src/day05_polymer.rs"
 [[bin]]
 name = "day06"
 path = "src/day06_manhattan.rs"
+
+[[bin]]
+name = "day07"
+path = "src/day07_sum_of_parts.rs"
