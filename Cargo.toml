@@ -37,3 +37,7 @@ path = "src/day07_sum_of_parts.rs"
 [[bin]]
 name = "day08"
 path = "src/day08_trees.rs"
+
+[[bin]]
+name = "day09"
+path = "src/day09_marbles.rs"
