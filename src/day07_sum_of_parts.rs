@@ -10,7 +10,8 @@ fn finish_node(
     node: &str,
     graph: &mut HashMap<String, Vec<String>>,
     rev_graph: &mut HashMap<String, Vec<String>>,
-    no_deps: &mut HashSet<String>) {
+    no_deps: &mut HashSet<String>,
+) {
     no_deps.remove(node);
     let neighbors = graph.get(node).unwrap_or(&vec![]).clone();
     for m in neighbors {
@@ -34,7 +35,7 @@ fn part_1(
     mut graph: HashMap<String, Vec<String>>,
     mut rev_graph: HashMap<String, Vec<String>>,
     mut no_deps: HashSet<String>,
-    mut next_nodes: Vec<String>
+    mut next_nodes: Vec<String>,
 ) -> String {
     // Build up exploration order.
     let mut order = Vec::new();
@@ -59,15 +60,17 @@ fn time_for_node(n: u8) -> u32 {
 
 // Like part 1, but with parallelism and operations taking time.
 // Returns amount of time taken.
-fn part_2(mut graph: HashMap<String, Vec<String>>,
-          mut rev_graph: HashMap<String, Vec<String>>,
-          mut no_deps: HashSet<String>,
-          mut next_nodes: Vec<String>,
-          num_workers: usize) -> u32 {
+fn part_2(
+    mut graph: HashMap<String, Vec<String>>,
+    mut rev_graph: HashMap<String, Vec<String>>,
+    mut no_deps: HashSet<String>,
+    mut next_nodes: Vec<String>,
+    num_workers: usize,
+) -> u32 {
     // Track what each worker is currently working on and when it'll be done.
-    let mut worker_track : Vec<Option<(String, u32)>> = vec![None; num_workers];
+    let mut worker_track: Vec<Option<(String, u32)>> = vec![None; num_workers];
 
-    let mut time : u32 = 0;
+    let mut time: u32 = 0;
     while !no_deps.is_empty() {
         for i in 0..worker_track.len() {
             if let Some((n, t)) = worker_track[i].clone() {
@@ -75,7 +78,12 @@ fn part_2(mut graph: HashMap<String, Vec<String>>,
                     finish_node(&n, &mut graph, &mut rev_graph, &mut no_deps);
                     // Add anything with no deps that is not already worked on.
                     for x in no_deps.iter() {
-                        if worker_track.iter().cloned().filter_map(|y| y).all(|(n, _)| n != *x) {
+                        if worker_track
+                            .iter()
+                            .cloned()
+                            .filter_map(|y| y)
+                            .all(|(n, _)| n != *x)
+                        {
                             next_nodes.push(x.to_string());
                         }
                     }
@@ -132,6 +140,14 @@ fn main() {
     // Sort in reverse so smallest is at end.
     next_nodes.sort_unstable_by(|a, b| b.cmp(a));
 
-    println!("{}", part_1(graph.clone(), rev_graph.clone(), no_deps.clone(), next_nodes.clone()));
+    println!(
+        "{}",
+        part_1(
+            graph.clone(),
+            rev_graph.clone(),
+            no_deps.clone(),
+            next_nodes.clone()
+        )
+    );
     println!("{}", part_2(graph, rev_graph, no_deps, next_nodes, 5));
 }
