@@ -91,7 +91,8 @@ pub fn main() {
     let mut min_bodies = bodies.clone();
     let mut min_overall_x = std::i32::MAX;
     let mut min_overall_y = std::i32::MAX;
-    for _ in 0..100000 {
+    let mut min_i = 0;
+    for i in 1..100000 {
         // Get bounding box
         let mut min_x = std::i32::MAX;
         let mut max_x = std::i32::MIN;
@@ -120,6 +121,7 @@ pub fn main() {
             min_bodies = bodies.clone();
             min_overall_x = min_x;
             min_overall_y = min_y;
+            min_i = i;
         }
     }
     let mut field = vec![vec![" "; (min_x_delta + 1) as usize]; (min_y_delta + 1) as usize];
@@ -131,4 +133,5 @@ pub fn main() {
     for row in field {
         println!("{}", row.join(""));
     }
+    println!("time: {}", min_i);
 }
