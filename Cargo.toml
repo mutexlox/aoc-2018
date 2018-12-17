@@ -41,3 +41,7 @@ path = "src/day08_trees.rs"
 [[bin]]
 name = "day09"
 path = "src/day09_marbles.rs"
+
+[[bin]]
+name = "day10"
+path = "src/day10_stars_align.rs"
