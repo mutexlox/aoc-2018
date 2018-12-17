@@ -45,3 +45,7 @@ path = "src/day09_marbles.rs"
 [[bin]]
 name = "day10"
 path = "src/day10_stars_align.rs"
+
+[[bin]]
+name = "day11"
+path = "src/day11_chronal_charge.rs"
