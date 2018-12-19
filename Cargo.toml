@@ -49,3 +49,7 @@ path = "src/day10_stars_align.rs"
 [[bin]]
 name = "day11"
 path = "src/day11_chronal_charge.rs"
+
+[[bin]]
+name = "day12"
+path = "src/day12_life.rs"
