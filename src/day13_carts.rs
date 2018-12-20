@@ -86,7 +86,7 @@ fn step(map: &mut Vec<Vec<Slot>>) -> Option<(usize, usize)> {
                     FaceDir::Right => (i, j + 1),
                     FaceDir::Down => (i + 1, j),
                 };
-                if map[new_i][new_j].cart.is_some() || new_map[new_i][new_j].cart.is_some() {
+                if new_map[new_i][new_j].cart.is_some() {
                     return Some((new_i, new_j));
                 }
                 new_map[i][j].cart = None;
