@@ -4,8 +4,8 @@ use std::io::{self, Read};
 enum Track {
     Vertical,
     Horizontal,
-    BLTRCurve,  // a curve like '/'
-    TLBRCurve,  // a curve like '\'
+    BLTRCurve, // a curve like '/'
+    TLBRCurve, // a curve like '\'
     Intersection,
 }
 
@@ -34,7 +34,7 @@ impl Cart {
     fn new(face_direction: FaceDir) -> Cart {
         Cart {
             next_direction: TurnDir::Left,
-            face_direction
+            face_direction,
         }
     }
 }
@@ -42,15 +42,12 @@ impl Cart {
 #[derive(Debug, Copy, Clone)]
 struct Slot {
     track: Option<Track>,
-    cart: Option<Cart>
+    cart: Option<Cart>,
 }
 
 impl Slot {
     fn new(track: Option<Track>, cart: Option<Cart>) -> Slot {
-        Slot {
-            track,
-            cart,
-        }
+        Slot { track, cart }
     }
 }
 
