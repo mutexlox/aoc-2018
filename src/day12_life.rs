@@ -42,7 +42,7 @@ fn main() {
         assert!((max_set + 3) - (min_set - 2) < 500);
         for i in (min_set - 2)..(max_set + 3) {
             let mut rule = 0;
-            for j in (i - 2) .. (i + 3) {
+            for j in (i - 2)..(i + 3) {
                 rule = rule << 1;
                 if state.contains(&j) {
                     rule += 1;
