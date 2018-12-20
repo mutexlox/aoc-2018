@@ -74,22 +74,36 @@ fn new_face_from_turn(t: TurnDir, f: FaceDir) -> FaceDir {
     }
 }
 
-// Evaluate one step, returning the location of a crash, if any.
+// Evaluate one step, returning the location of the sole cart left if only one.
 fn step(map: &mut Vec<Vec<Slot>>) -> Option<(usize, usize)> {
     let mut new_map = map.clone();
+    let mut cart_pos = None;
+    let mut num_carts = 0;
     for i in 0..map.len() {
         for j in 0..map[i].len() {
             if let Some(mut c) = map[i][j].cart {
+                num_carts += 1;
+                // Update cart location to track whether it's sole remaining.
+                if num_carts == 1 {
+                    cart_pos = Some((i, j));
+                } else {
+                    cart_pos = None;
+                }
+
                 let (new_i, new_j) = match c.face_direction {
                     FaceDir::Up => (i - 1, j),
                     FaceDir::Left => (i, j - 1),
                     FaceDir::Right => (i, j + 1),
                     FaceDir::Down => (i + 1, j),
                 };
-                if new_map[new_i][new_j].cart.is_some() {
-                    return Some((new_i, new_j));
-                }
+
                 new_map[i][j].cart = None;
+                if new_map[new_i][new_j].cart.is_some() {
+                    // On a collision, clear square.
+                    new_map[new_i][new_j].cart = None;
+                    map[new_i][new_j].cart = None;
+                    continue;
+                }
                 c.face_direction = match (map[new_i][new_j].track, c.face_direction) {
                     (Some(Track::BLTRCurve), FaceDir::Up) => FaceDir::Right,
                     (Some(Track::BLTRCurve), FaceDir::Left) => FaceDir::Down,
@@ -113,7 +127,7 @@ fn step(map: &mut Vec<Vec<Slot>>) -> Option<(usize, usize)> {
         }
     }
     *map = new_map;
-    None
+    cart_pos
 }
 
 fn main() {
