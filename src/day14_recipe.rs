@@ -3,9 +3,9 @@ use std::io::{self, Read};
 fn add_new_scores(scores: &mut Vec<usize>, elves: &Vec<usize>) {
     let sum: usize = scores[elves[0]] + scores[elves[1]];
     if sum >= 10 {
-        (*scores).push((sum / 10) % 10);
+        scores.push((sum / 10) % 10);
     }
-    (*scores).push(sum % 10);
+    scores.push(sum % 10);
 }
 
 fn main() {
