@@ -72,7 +72,7 @@ where
         let after_regs = parse_arr(after);
 
         let mut i = 0;
-        let mut possible_ops = &mut possible_op_assignment[instr[0]];
+        let possible_ops = &mut possible_op_assignment[instr[0]];
         while i < possible_ops.len() {
             let op = &ops[possible_ops[i]];
             let mut tmp_regs = regs.to_vec();

@@ -15,8 +15,8 @@ fn finish_node(
     no_deps.remove(node);
     let neighbors = graph.get(node).unwrap_or(&vec![]).clone();
     for m in neighbors {
-        let mut n_entry = graph.entry(node.to_string());
-        let mut m_entry = rev_graph
+        let n_entry = graph.entry(node.to_string());
+        let m_entry = rev_graph
             .entry(m.to_string())
             .and_modify(|v| v.retain(|x| *x != node));
         // If there are now no incoming edges to m, delete from rev_graph.
