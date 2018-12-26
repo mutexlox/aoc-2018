@@ -77,8 +77,20 @@ fn main() {
         .split("\n")
         .map(|s| s.chars().collect::<Vec<_>>())
         .collect::<Vec<Vec<_>>>();
-    for _ in 0..10 {
+    let mut cycle = Vec::new();
+    // By inspection, resource count hits a cycle of length 28 with first repeat starting when
+    // i = 569. So, loop until there and extrapolate.
+    let start = 542;
+    let cycle_len = 28;
+    for i in 0..start + cycle_len {
         step(&mut lines);
+        if i >= start {
+            let rc = resource_count(&lines);
+            cycle.push(rc);
+        }
     }
-    println!("{}", resource_count(&lines));
+    assert_eq!(cycle.len(), cycle_len);
+    let target = 1_000_000_000 - 1; // AoC's count is off by one from my loop.
+    let idx = (target - start) % cycle_len;
+    println!("{}", cycle[idx]);
 }
