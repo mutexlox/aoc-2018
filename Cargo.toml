@@ -70,3 +70,7 @@ path = "src/day16_interp.rs"
 [[bin]]
 name = "day17"
 path = "src/day17_water.rs"
+
+[[bin]]
+name = "day18"
+path = "src/day18_life.rs"
