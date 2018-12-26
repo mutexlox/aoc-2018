@@ -48,11 +48,14 @@ fn explore(map: &mut HashMap<(usize, usize), char>, x: usize, y: usize, y_max: u
         }
         let mut closed_right = false;
         let mut i = x;
+        let mut min_x = 0;
+        let mut max_x = 0;
         while let Some(c) = map.get(&(i, y)) {
             if *c == '|' {
                 i += 1;
             } else if *c == '#' || *c == '~' {
                 closed_right = true;
+                max_x = i;  // exclusive
                 break;
             } else {
                 break;
@@ -61,17 +64,20 @@ fn explore(map: &mut HashMap<(usize, usize), char>, x: usize, y: usize, y_max: u
         let mut closed_left = false;
         i = x;
         while let Some(c) = map.get(&(i, y)) {
-            if *c == '|' || *c == '~' {
+            if *c == '|' {
                 i -= 1;
-            } else if *c == '#' {
+            } else if *c == '#' || *c == '~' {
                 closed_left = true;
+                min_x = i + 1;
                 break;
             } else {
                 break;
             }
         }
         if closed_left && closed_right {
-            map.insert((x, y), '~');
+            for i in min_x..max_x {
+                map.insert((i, y), '~');
+            }
         }
     }
 }
@@ -118,4 +124,6 @@ fn main() {
             .filter(|((_, y), c)| *y >= y_min && *y <= y_max && (**c == '~' || **c == '|'))
             .count()
     );
+
+    println!("{}", map.values().filter(|c| **c == '~').count());
 }
