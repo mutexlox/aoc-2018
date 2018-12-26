@@ -55,7 +55,7 @@ fn explore(map: &mut HashMap<(usize, usize), char>, x: usize, y: usize, y_max: u
                 i += 1;
             } else if *c == '#' || *c == '~' {
                 closed_right = true;
-                max_x = i;  // exclusive
+                max_x = i; // exclusive
                 break;
             } else {
                 break;
