@@ -78,17 +78,57 @@ fn main() {
     let mut cmp_srcs = arith_srcs.to_vec();
     cmp_srcs.push((Source::Imm, Source::Reg));
     for srcs in arith_srcs {
-        ops.push(Op::new(Box::new(|a, b| a + b), srcs, "+"));
-        ops.push(Op::new(Box::new(|a, b| a * b), srcs, "*"));
-        ops.push(Op::new(Box::new(|a, b| a & b), srcs, "&"));
-        ops.push(Op::new(Box::new(|a, b| a | b), srcs, "|"));
+        let suffix = match srcs.1 {
+            Source::Reg => "r",
+            Source::Imm => "i",
+        };
+        ops.push(Op::new(
+            Box::new(|a, b| a + b),
+            srcs,
+            format!("add{}", suffix),
+        ));
+        ops.push(Op::new(
+            Box::new(|a, b| a * b),
+            srcs,
+            format!("mul{}", suffix),
+        ));
+        ops.push(Op::new(
+            Box::new(|a, b| a & b),
+            srcs,
+            format!("ban{}", suffix),
+        ));
+        ops.push(Op::new(
+            Box::new(|a, b| a | b),
+            srcs,
+            format!("bor{}", suffix),
+        ));
     }
     for srcs in vec![(Source::Reg, Source::Reg), (Source::Imm, Source::Reg)] {
-        ops.push(Op::new(Box::new(|a, _b| a), srcs, "="));
+        let suffix = match srcs.0 {
+            Source::Reg => "r",
+            Source::Imm => "i",
+        };
+        ops.push(Op::new(Box::new(|a, _b| a), srcs, format!("set{}", suffix)));
     }
     for srcs in cmp_srcs {
-        ops.push(Op::new(Box::new(|a, b| (a > b).into()), srcs, ">"));
-        ops.push(Op::new(Box::new(|a, b| (a == b).into()), srcs, "=="));
+        let suffix0 = match srcs.0 {
+            Source::Reg => "r",
+            Source::Imm => "i",
+        };
+        let suffix1 = match srcs.1 {
+            Source::Reg => "r",
+            Source::Imm => "i",
+        };
+        ops.push(Op::new(
+            Box::new(|a, b| (a > b).into()),
+            srcs,
+            format!("gt{}{}", suffix0, suffix1),
+        ));
+        ops.push(Op::new(
+            Box::new(|a, b| (a == b).into()),
+            srcs,
+            format!("eq{}{}", suffix0, suffix1),
+        ));
     }
     assert_eq!(ops.len(), 16);
 

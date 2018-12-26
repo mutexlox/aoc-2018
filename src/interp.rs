@@ -16,13 +16,9 @@ impl Op {
     pub fn new(
         op: Box<dyn Fn(usize, usize) -> usize>,
         sources: (Source, Source),
-        name: &str,
+        name: String,
     ) -> Op {
-        Op {
-            op,
-            sources,
-            name: name.to_string(),
-        }
+        Op { op, sources, name }
     }
 }
 
