@@ -1,6 +1,7 @@
 mod interp;
 
-use crate::interp::{do_op, Op, Source};
+use crate::interp::{do_op, get_ops, Op};
+use std::collections::HashMap;
 use std::io::{self, Read};
 
 fn parse_arr(line: &str) -> Vec<usize> {
@@ -11,12 +12,12 @@ fn parse_arr(line: &str) -> Vec<usize> {
 }
 
 /// Build a mapping from operators in the input to operators in our order.
-fn get_op_mapping<'a, I>(ops: &Vec<Op>, mut sample_input: I) -> Vec<usize>
+fn get_op_mapping<'a, I>(ops: &HashMap<String, Op>, mut sample_input: I) -> Vec<&String>
 where
     I: Iterator<Item = &'a str>,
 {
     // At the start, each number could be any possible op. (Index into |ops|)
-    let mut possible_op_assignment: Vec<Vec<usize>> = vec![(0..16).collect(); 16];
+    let mut possible_op_assignment: Vec<Vec<&String>> = vec![ops.keys().collect(); 16];
 
     while let Some(before) = sample_input.next() {
         if !before.starts_with("Before:") {
@@ -73,47 +74,7 @@ where
 
 fn main() {
     // Define base operators.
-    let mut ops = Vec::new();
-    let arith_srcs = vec![(Source::Reg, Source::Reg), (Source::Reg, Source::Imm)];
-    let mut cmp_srcs = arith_srcs.to_vec();
-    cmp_srcs.push((Source::Imm, Source::Reg));
-    for srcs in arith_srcs {
-        ops.push(Op::new(
-            Box::new(|a, b| a + b),
-            srcs,
-            format!("add{}", srcs.1),
-        ));
-        ops.push(Op::new(
-            Box::new(|a, b| a * b),
-            srcs,
-            format!("mul{}", srcs.1),
-        ));
-        ops.push(Op::new(
-            Box::new(|a, b| a & b),
-            srcs,
-            format!("ban{}", srcs.1),
-        ));
-        ops.push(Op::new(
-            Box::new(|a, b| a | b),
-            srcs,
-            format!("bor{}", srcs.1),
-        ));
-    }
-    for srcs in vec![(Source::Reg, Source::Reg), (Source::Imm, Source::Reg)] {
-        ops.push(Op::new(Box::new(|a, _b| a), srcs, format!("set{}", srcs.0)));
-    }
-    for srcs in cmp_srcs {
-        ops.push(Op::new(
-            Box::new(|a, b| (a > b).into()),
-            srcs,
-            format!("gt{}{}", srcs.0, srcs.1),
-        ));
-        ops.push(Op::new(
-            Box::new(|a, b| (a == b).into()),
-            srcs,
-            format!("eq{}{}", srcs.0, srcs.1),
-        ));
-    }
+    let ops = get_ops();
     assert_eq!(ops.len(), 16);
 
     let mut input = String::new();
