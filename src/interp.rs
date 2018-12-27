@@ -6,6 +6,15 @@ pub enum Source {
     Imm,
 }
 
+impl fmt::Display for Source {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Source::Reg => write!(f, "r"),
+            Source::Imm => write!(f, "i"),
+        }
+    }
+}
+
 pub struct Op {
     op: Box<dyn Fn(usize, usize) -> usize>,
     sources: (Source, Source),

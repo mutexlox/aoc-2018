@@ -78,56 +78,40 @@ fn main() {
     let mut cmp_srcs = arith_srcs.to_vec();
     cmp_srcs.push((Source::Imm, Source::Reg));
     for srcs in arith_srcs {
-        let suffix = match srcs.1 {
-            Source::Reg => "r",
-            Source::Imm => "i",
-        };
         ops.push(Op::new(
             Box::new(|a, b| a + b),
             srcs,
-            format!("add{}", suffix),
+            format!("add{}", srcs.1),
         ));
         ops.push(Op::new(
             Box::new(|a, b| a * b),
             srcs,
-            format!("mul{}", suffix),
+            format!("mul{}", srcs.1),
         ));
         ops.push(Op::new(
             Box::new(|a, b| a & b),
             srcs,
-            format!("ban{}", suffix),
+            format!("ban{}", srcs.1),
         ));
         ops.push(Op::new(
             Box::new(|a, b| a | b),
             srcs,
-            format!("bor{}", suffix),
+            format!("bor{}", srcs.1),
         ));
     }
     for srcs in vec![(Source::Reg, Source::Reg), (Source::Imm, Source::Reg)] {
-        let suffix = match srcs.0 {
-            Source::Reg => "r",
-            Source::Imm => "i",
-        };
-        ops.push(Op::new(Box::new(|a, _b| a), srcs, format!("set{}", suffix)));
+        ops.push(Op::new(Box::new(|a, _b| a), srcs, format!("set{}", srcs.0)));
     }
     for srcs in cmp_srcs {
-        let suffix0 = match srcs.0 {
-            Source::Reg => "r",
-            Source::Imm => "i",
-        };
-        let suffix1 = match srcs.1 {
-            Source::Reg => "r",
-            Source::Imm => "i",
-        };
         ops.push(Op::new(
             Box::new(|a, b| (a > b).into()),
             srcs,
-            format!("gt{}{}", suffix0, suffix1),
+            format!("gt{}{}", srcs.0, srcs.1),
         ));
         ops.push(Op::new(
             Box::new(|a, b| (a == b).into()),
             srcs,
-            format!("eq{}{}", suffix0, suffix1),
+            format!("eq{}{}", srcs.0, srcs.1),
         ));
     }
     assert_eq!(ops.len(), 16);
