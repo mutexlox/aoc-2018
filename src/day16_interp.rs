@@ -73,9 +73,7 @@ where
 }
 
 fn main() {
-    // Define base operators.
     let ops = get_ops();
-    assert_eq!(ops.len(), 16);
 
     let mut input = String::new();
     io::stdin().read_to_string(&mut input).unwrap();

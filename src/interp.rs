@@ -65,7 +65,7 @@ pub fn get_ops() -> HashMap<String, Op> {
         let bor = Op::new(Box::new(|a, b| a | b), srcs, format!("bor{}", srcs.1));
         ops.insert(bor.name.clone(), bor);
     }
-    for srcs in vec![(Source::Reg, Source::Reg), (Source::Imm, Source::Reg)] {
+    for srcs in vec![(Source::Reg, Source::Imm), (Source::Imm, Source::Imm)] {
         let set = Op::new(Box::new(|a, _b| a), srcs, format!("set{}", srcs.0));
         ops.insert(set.name.clone(), set);
     }
@@ -83,5 +83,6 @@ pub fn get_ops() -> HashMap<String, Op> {
         );
         ops.insert(eq.name.clone(), eq);
     }
+    assert_eq!(ops.len(), 16);
     ops
 }
