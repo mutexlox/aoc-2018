@@ -67,7 +67,8 @@ fn main() {
         .collect::<Vec<_>>();
     let mut regs = vec![0; 6];
     let mut ip = 0;
-    while ip < instrs.len() {
+    regs[0] = 1;
+    while ip < instrs.len() && ip != 1 {
         regs[ip_reg] = ip;
 
         let inst = &instrs[ip];
@@ -75,5 +76,17 @@ fn main() {
         ip = regs[ip_reg];
         ip += 1;
     }
-    println!("{}", regs[0]);
+    let upper = (regs[5] as f64).sqrt() as usize;
+    let mut count = 0;
+    // This is an optimized version of the program in inputs/day19_interp.txt
+    for i in 1..upper + 1 {
+        if regs[5] % i == 0 {
+            count += i;
+            let j = regs[5] / i;
+            if j != i {
+                count += j;
+            }
+        }
+    }
+    println!("{}", count);
 }
