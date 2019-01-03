@@ -52,6 +52,50 @@ impl Instruction {
     }
 }
 
+pub struct Program {
+    ip_reg: usize,
+    instructions: Vec<Instruction>,
+    ops: HashMap<String, Op>,
+    pub regs: Vec<usize>,
+}
+
+impl FromStr for Program {
+    type Err = FormatError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut lines = s.trim().split("\n");
+        let ip_reg = lines
+            .next()
+            .unwrap()
+            .split(" ")
+            .nth(1)
+            .unwrap()
+            .parse::<usize>()
+            .unwrap();
+        let instrs = lines
+            .map(|l| l.parse::<Instruction>())
+            .collect::<Result<Vec<_>, _>>()?;
+        Ok(Program {
+            ip_reg,
+            instructions: instrs,
+            ops: get_ops(),
+            regs: Vec::new(),
+        })
+    }
+}
+
+impl Program {
+    pub fn exec(&mut self, stop_ip: Option<usize>) {
+        let mut ip = 0;
+        while ip < self.instructions.len() && stop_ip.filter(|x| *x == ip).is_none() {
+            self.regs[self.ip_reg] = ip;
+
+            self.instructions[ip].execute(&self.ops, &mut self.regs);
+            ip = self.regs[self.ip_reg];
+            ip += 1;
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 pub enum Source {
     Reg,
