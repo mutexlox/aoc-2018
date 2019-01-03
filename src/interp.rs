@@ -1,5 +1,56 @@
 use std::collections::HashMap;
+use std::error;
 use std::fmt;
+use std::str::FromStr;
+
+#[derive(Debug)]
+pub struct Instruction {
+    name: String,
+    a: usize,
+    b: usize,
+    c: usize,
+}
+
+#[derive(Debug, Clone)]
+pub struct FormatError;
+
+impl fmt::Display for FormatError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "invalid format for input; expect name a b c")
+    }
+}
+
+impl error::Error for FormatError {
+    fn description(&self) -> &str {
+        "invalid format for input; expect name a b c"
+    }
+    fn cause(&self) -> Option<&error::Error> {
+        // Generic error, underlying cause isn't tracked.
+        None
+    }
+}
+
+impl FromStr for Instruction {
+    type Err = FormatError;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let parts = s.split(" ").collect::<Vec<_>>();
+        let a = parts[1].parse::<usize>().or(Err(FormatError))?;
+        let b = parts[2].parse::<usize>().or(Err(FormatError))?;
+        let c = parts[3].parse::<usize>().or(Err(FormatError))?;
+        Ok(Instruction {
+            name: parts[0].to_string(),
+            a,
+            b,
+            c,
+        })
+    }
+}
+
+impl Instruction {
+    pub fn execute(&self, ops: &HashMap<String, Op>, regs: &mut Vec<usize>) {
+        do_op(&ops[&self.name], regs, self.a, self.b, self.c);
+    }
+}
 
 #[derive(Debug, Clone, Copy)]
 pub enum Source {
